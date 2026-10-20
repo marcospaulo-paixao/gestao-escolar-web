@@ -1,0 +1,33 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+<jsp:directive.tag pageEncoding="UTF-8" description="Barra de navegação superior"/>
+<jsp:directive.attribute name="ativa" required="false" description="Item destacado: estudantes, cursos ou turmas"/>
+<!-- Barra de Navegação Superior -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="${pageContext.request.contextPath}/">Escola</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegação">
+            <span class="navbar-toggler-icon"><jsp:text> </jsp:text></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link${ativa eq 'estudantes' ? ' active' : ''}"
+                       aria-current="${ativa eq 'estudantes' ? 'page' : 'false'}"
+                       href="${pageContext.request.contextPath}/estudantes">Estudantes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link${ativa eq 'cursos' ? ' active' : ''}"
+                       aria-current="${ativa eq 'cursos' ? 'page' : 'false'}"
+                       href="${pageContext.request.contextPath}/cursos">Cursos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link${ativa eq 'turmas' ? ' active' : ''}"
+                       aria-current="${ativa eq 'turmas' ? 'page' : 'false'}"
+                       href="${pageContext.request.contextPath}/turmas">Turmas</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</jsp:root>

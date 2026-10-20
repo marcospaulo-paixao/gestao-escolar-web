@@ -1,0 +1,25 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:t="urn:jsptagdir:/WEB-INF/tags" version="2.0">
+<jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+<jsp:output omit-xml-declaration="true" doctype-root-element="html" doctype-system="about:legacy-compat"/>
+<t:layout titulo="Gestão Escolar">
+
+<!-- Conteúdo Principal -->
+<main class="container mt-5" style="max-width: 900px;">
+    <div class="text-center mb-5">
+        <h1 class="text-uppercase mb-3" style="letter-spacing: 1px;">Gestão Escolar</h1>
+        <p class="lead text-body-secondary">Cadastre estudantes, cursos e turmas em um só lugar.</p>
+    </div>
+
+    <!-- Atalhos para os Cadastros -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <t:cartao titulo="Estudantes" descricao="Cadastro e consulta dos estudantes matriculados."
+                  link="/estudantes"/>
+        <t:cartao titulo="Cursos" descricao="Cursos oferecidos, carga horária e nível."
+                  link="/cursos"/>
+        <t:cartao titulo="Turmas" descricao="Turmas abertas e seus cursos e estudantes."
+                  link="/turmas"/>
+    </div>
+</main>
+
+</t:layout>
+</jsp:root>

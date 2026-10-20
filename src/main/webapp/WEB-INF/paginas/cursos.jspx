@@ -1,0 +1,81 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:t="urn:jsptagdir:/WEB-INF/tags"
+          xmlns:c="jakarta.tags.core" xmlns:fn="jakarta.tags.functions" version="2.0">
+<jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+<jsp:output omit-xml-declaration="true" doctype-root-element="html" doctype-system="about:legacy-compat"/>
+<t:layout titulo="Cadastro de Cursos" pagina="cursos">
+
+<!-- Conteúdo Principal -->
+<main class="container mt-4" style="max-width: 900px;">
+    <h1 class="text-center text-uppercase mb-4" style="letter-spacing: 1px;">Cadastro de Cursos</h1>
+
+    <!-- Formulário de Cadastro -->
+    <form action="${pageContext.request.contextPath}/cursos" method="post" class="mb-5">
+        <input type="hidden" name="id" value="${item.id}"/>
+
+        <div class="mb-3">
+            <label for="codigo" class="form-label">Código:</label>
+            <input type="text" class="form-control" id="codigo" name="codigo" maxlength="20"
+                   value="${fn:escapeXml(item.codigo)}" required="required"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome:</label>
+            <input type="text" class="form-control" id="nome" name="nome" maxlength="100"
+                   value="${fn:escapeXml(item.nome)}" required="required"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="cargaHoraria" class="form-label">Carga horária (horas):</label>
+            <input type="number" class="form-control" id="cargaHoraria" name="cargaHoraria" min="1"
+                   value="${item.cargaHoraria}" required="required"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="nivel" class="form-label">Nível:</label>
+            <select class="form-select" id="nivel" name="nivel" required="required">
+                <c:forEach var="nivel" items="${niveis}">
+                    <t:opcao valor="${nivel}" rotulo="${nivel.descricao}" selecionada="${item.nivel eq nivel}"/>
+                </c:forEach>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary px-4">Gravar</button>
+        <c:if test="${not empty item.id}">
+            <a href="${pageContext.request.contextPath}/cursos" class="btn btn-secondary ms-2">Cancelar</a>
+        </c:if>
+    </form>
+
+    <!-- Tabela de Cursos Cadastrados -->
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+            <tr class="text-uppercase" style="font-size: 0.9rem; font-weight: bold;">
+                <th scope="col">Código</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Carga Horária</th>
+                <th scope="col">Nível</th>
+                <th scope="col">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="curso" items="${lista}">
+                <tr>
+                    <td><c:out value="${curso.codigo}"/></td>
+                    <td><c:out value="${curso.nome}"/></td>
+                    <td>${curso.cargaHoraria} horas</td>
+                    <td>${curso.nivel.descricao}</td>
+                    <td><t:acoes registro="${curso.id}" url="/cursos"/></td>
+                </tr>
+            </c:forEach>
+            <c:if test="${empty lista}">
+                <tr>
+                    <td colspan="5" class="text-center text-body-secondary">Nenhum curso cadastrado.</td>
+                </tr>
+            </c:if>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</t:layout>
+</jsp:root>

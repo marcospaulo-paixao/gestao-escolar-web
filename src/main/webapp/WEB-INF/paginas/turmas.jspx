@@ -1,0 +1,102 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:t="urn:jsptagdir:/WEB-INF/tags"
+          xmlns:c="jakarta.tags.core" xmlns:fn="jakarta.tags.functions" version="2.0">
+<jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+<jsp:output omit-xml-declaration="true" doctype-root-element="html" doctype-system="about:legacy-compat"/>
+<t:layout titulo="Cadastro de Turmas" pagina="turmas">
+
+<!-- Conteúdo Principal -->
+<main class="container mt-4" style="max-width: 900px;">
+    <h1 class="text-center text-uppercase mb-4" style="letter-spacing: 1px;">Cadastro de Turmas</h1>
+
+    <!-- Formulário de Cadastro -->
+    <form action="${pageContext.request.contextPath}/turmas" method="post" class="mb-5">
+        <input type="hidden" name="id" value="${item.id}"/>
+
+        <div class="mb-3">
+            <label for="codigo" class="form-label">Código:</label>
+            <input type="text" class="form-control" id="codigo" name="codigo" maxlength="20"
+                   value="${fn:escapeXml(item.codigo)}" required="required"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="curso" class="form-label">Curso:</label>
+            <select class="form-select" id="curso" name="curso" required="required">
+                <c:forEach var="curso" items="${cursos}">
+                    <t:opcao valor="${curso.id}" rotulo="${curso.nome}" selecionada="${item.curso.id eq curso.id}"/>
+                </c:forEach>
+            </select>
+            <c:if test="${empty cursos}">
+                <div class="form-text">
+                    Nenhum curso cadastrado.
+                    <a href="${pageContext.request.contextPath}/cursos">Cadastre um curso</a> antes de criar turmas.
+                </div>
+            </c:if>
+        </div>
+
+        <div class="mb-3">
+            <label for="turno" class="form-label">Turno:</label>
+            <select class="form-select" id="turno" name="turno" required="required">
+                <c:forEach var="turno" items="${turnos}">
+                    <t:opcao valor="${turno}" rotulo="${turno.descricao}" selecionada="${item.turno eq turno}"/>
+                </c:forEach>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="dataInicio" class="form-label">Data de início:</label>
+            <input type="date" class="form-control" id="dataInicio" name="dataInicio"
+                   value="${item.dataInicio}" required="required"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="vagas" class="form-label">Vagas:</label>
+            <input type="number" class="form-control" id="vagas" name="vagas" min="1"
+                   value="${item.vagas}" required="required"/>
+        </div>
+
+        <button type="submit" class="btn btn-primary px-4">Gravar</button>
+        <c:if test="${not empty item.id}">
+            <a href="${pageContext.request.contextPath}/turmas" class="btn btn-secondary ms-2">Cancelar</a>
+        </c:if>
+    </form>
+
+    <!-- Tabela de Turmas Cadastradas -->
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+            <tr class="text-uppercase" style="font-size: 0.9rem; font-weight: bold;">
+                <th scope="col">Código</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Turno</th>
+                <th scope="col">Início</th>
+                <th scope="col">Ocupação</th>
+                <th scope="col">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="turma" items="${lista}">
+                <tr>
+                    <td><c:out value="${turma.codigo}"/></td>
+                    <td><c:out value="${turma.curso.nome}"/></td>
+                    <td>${turma.turno.descricao}</td>
+                    <td>${turma.dataInicioFormatada}</td>
+                    <td>${empty ocupadas[turma.id] ? 0 : ocupadas[turma.id]} / ${turma.vagas}</td>
+                    <td class="text-nowrap">
+                        <a href="${pageContext.request.contextPath}/matriculas?turma=${turma.id}"
+                           class="btn btn-info btn-sm me-1 text-white">Matrículas</a>
+                        <t:acoes registro="${turma.id}" url="/turmas"/>
+                    </td>
+                </tr>
+            </c:forEach>
+            <c:if test="${empty lista}">
+                <tr>
+                    <td colspan="6" class="text-center text-body-secondary">Nenhuma turma cadastrada.</td>
+                </tr>
+            </c:if>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</t:layout>
+</jsp:root>

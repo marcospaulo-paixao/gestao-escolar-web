@@ -1,0 +1,78 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:t="urn:jsptagdir:/WEB-INF/tags"
+          xmlns:c="jakarta.tags.core" xmlns:fn="jakarta.tags.functions" version="2.0">
+<jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+<jsp:output omit-xml-declaration="true" doctype-root-element="html" doctype-system="about:legacy-compat"/>
+<t:layout titulo="Cadastro de Estudantes" pagina="estudantes">
+
+<!-- Conteúdo Principal -->
+<main class="container mt-4" style="max-width: 900px;">
+    <h1 class="text-center text-uppercase mb-4" style="letter-spacing: 1px;">Cadastro de Estudantes</h1>
+
+    <!-- Formulário de Cadastro -->
+    <form action="${pageContext.request.contextPath}/estudantes" method="post" class="mb-5">
+        <input type="hidden" name="id" value="${item.id}"/>
+
+        <div class="mb-3">
+            <label for="matricula" class="form-label">Matrícula:</label>
+            <input type="text" class="form-control" id="matricula" name="matricula" maxlength="20"
+                   value="${fn:escapeXml(item.matricula)}" required="required"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome:</label>
+            <input type="text" class="form-control" id="nome" name="nome" maxlength="100"
+                   value="${fn:escapeXml(item.nome)}" required="required"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">E-mail:</label>
+            <input type="email" class="form-control" id="email" name="email" maxlength="100"
+                   value="${fn:escapeXml(item.email)}" required="required"/>
+        </div>
+
+        <div class="mb-3">
+            <label for="dataNascimento" class="form-label">Data de nascimento:</label>
+            <input type="date" class="form-control" id="dataNascimento" name="dataNascimento"
+                   value="${item.dataNascimento}" required="required"/>
+        </div>
+
+        <button type="submit" class="btn btn-primary px-4">Gravar</button>
+        <c:if test="${not empty item.id}">
+            <a href="${pageContext.request.contextPath}/estudantes" class="btn btn-secondary ms-2">Cancelar</a>
+        </c:if>
+    </form>
+
+    <!-- Tabela de Estudantes Cadastrados -->
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+            <tr class="text-uppercase" style="font-size: 0.9rem; font-weight: bold;">
+                <th scope="col">Matrícula</th>
+                <th scope="col">Nome</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Data de Nascimento</th>
+                <th scope="col">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="estudante" items="${lista}">
+                <tr>
+                    <td><c:out value="${estudante.matricula}"/></td>
+                    <td><c:out value="${estudante.nome}"/></td>
+                    <td><c:out value="${estudante.email}"/></td>
+                    <td>${estudante.dataNascimentoFormatada}</td>
+                    <td><t:acoes registro="${estudante.id}" url="/estudantes"/></td>
+                </tr>
+            </c:forEach>
+            <c:if test="${empty lista}">
+                <tr>
+                    <td colspan="5" class="text-center text-body-secondary">Nenhum estudante cadastrado.</td>
+                </tr>
+            </c:if>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</t:layout>
+</jsp:root>

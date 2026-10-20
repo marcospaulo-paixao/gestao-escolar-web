@@ -1,0 +1,15 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+<jsp:directive.tag pageEncoding="UTF-8" description="Cartão de atalho da página inicial"/>
+<jsp:directive.attribute name="titulo" required="true"/>
+<jsp:directive.attribute name="descricao" required="true"/>
+<jsp:directive.attribute name="link" required="true" description="Caminho a partir da raiz da aplicação, ex.: /paginas/cursos.jspx"/>
+<div class="col">
+    <div class="card h-100 shadow-sm">
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title">${titulo}</h5>
+            <p class="card-text text-body-secondary">${descricao}</p>
+            <a href="${pageContext.request.contextPath}${link}" class="btn btn-primary mt-auto">Acessar</a>
+        </div>
+    </div>
+</div>
+</jsp:root>

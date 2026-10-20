@@ -1,0 +1,13 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+<jsp:directive.tag pageEncoding="UTF-8" description="Botões Editar e Excluir de uma linha da tabela"/>
+<jsp:directive.attribute name="registro" required="true" description="Id do registro da linha"/>
+<jsp:directive.attribute name="url" required="true" description="Endereço do cadastro, ex.: /cursos"/>
+<a href="${pageContext.request.contextPath}${url}?editar=${registro}"
+   class="btn btn-warning btn-sm me-1 text-white">Editar</a>
+<form action="${pageContext.request.contextPath}${url}" method="post" class="d-inline"
+      onsubmit="return confirm('Deseja excluir este registro?');">
+    <input type="hidden" name="acao" value="excluir"/>
+    <input type="hidden" name="id" value="${registro}"/>
+    <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+</form>
+</jsp:root>

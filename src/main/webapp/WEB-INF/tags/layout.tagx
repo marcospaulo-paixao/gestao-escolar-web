@@ -1,0 +1,42 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:t="urn:jsptagdir:/WEB-INF/tags"
+          xmlns:c="jakarta.tags.core" version="2.0">
+<jsp:directive.tag pageEncoding="UTF-8" description="Estrutura comum das páginas: head, barra de navegação, mensagens e scripts"/>
+<jsp:directive.attribute name="titulo" required="true"/>
+<jsp:directive.attribute name="pagina" required="false" description="Item do menu destacado: estudantes, cursos ou turmas"/>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>${titulo}</title>
+    <!-- CSS do Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous"/>
+</head>
+<body>
+
+<t:menu ativa="${pagina}"/>
+
+<!-- Mensagens: sucesso vem da sessão (depois do redirect), erro vem do request -->
+<c:if test="${not empty sessionScope.sucesso}">
+    <div class="container mt-3" style="max-width: 900px;">
+        <div class="alert alert-success mb-0"><c:out value="${sessionScope.sucesso}"/></div>
+    </div>
+    <c:remove var="sucesso" scope="session"/>
+</c:if>
+<c:if test="${not empty requestScope.erro}">
+    <div class="container mt-3" style="max-width: 900px;">
+        <div class="alert alert-danger mb-0"><c:out value="${requestScope.erro}"/></div>
+    </div>
+</c:if>
+
+<jsp:doBody/>
+
+<!-- JS do Bootstrap 5 (inclui Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"><jsp:text> </jsp:text></script>
+</body>
+</html>
+</jsp:root>

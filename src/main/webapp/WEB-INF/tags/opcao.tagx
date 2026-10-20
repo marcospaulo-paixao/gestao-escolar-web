@@ -1,0 +1,14 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="jakarta.tags.core" version="2.0">
+<jsp:directive.tag pageEncoding="UTF-8" description="Option de um select, marcada quando selecionada for verdadeiro"/>
+<jsp:directive.attribute name="valor" required="true"/>
+<jsp:directive.attribute name="rotulo" required="true"/>
+<jsp:directive.attribute name="selecionada" required="false" type="java.lang.Boolean"/>
+<c:choose>
+    <c:when test="${selecionada}">
+        <option value="${valor}" selected="selected"><c:out value="${rotulo}"/></option>
+    </c:when>
+    <c:otherwise>
+        <option value="${valor}"><c:out value="${rotulo}"/></option>
+    </c:otherwise>
+</c:choose>
+</jsp:root>

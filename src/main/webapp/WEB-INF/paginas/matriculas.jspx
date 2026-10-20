@@ -1,0 +1,108 @@
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:t="urn:jsptagdir:/WEB-INF/tags"
+          xmlns:c="jakarta.tags.core" version="2.0">
+<jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+<jsp:output omit-xml-declaration="true" doctype-root-element="html" doctype-system="about:legacy-compat"/>
+<t:layout titulo="Matrículas da Turma ${turma.codigo}" pagina="turmas">
+
+<!-- Conteúdo Principal -->
+<main class="container mt-4" style="max-width: 900px;">
+    <h1 class="text-center text-uppercase mb-4" style="letter-spacing: 1px;">
+        Matrículas da Turma <c:out value="${turma.codigo}"/>
+    </h1>
+
+    <!-- Dados da Turma -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-sm-6 col-md-3">
+                    <div class="text-body-secondary small">Curso</div>
+                    <div class="fw-semibold"><c:out value="${turma.curso.nome}"/></div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="text-body-secondary small">Turno</div>
+                    <div class="fw-semibold">${turma.turno.descricao}</div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="text-body-secondary small">Início</div>
+                    <div class="fw-semibold">${turma.dataInicioFormatada}</div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="text-body-secondary small">Vagas ocupadas</div>
+                    <div class="fw-semibold">${ocupadas} de ${turma.vagas}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulário de Matrícula -->
+    <c:choose>
+        <c:when test="${lotada}">
+            <div class="alert alert-warning mb-5">A turma está lotada. Cancele uma matrícula ou aumente as vagas para matricular novos estudantes.</div>
+        </c:when>
+        <c:when test="${empty disponiveis}">
+            <div class="alert alert-secondary mb-5">
+                Não há estudantes disponíveis para matricular.
+                <a href="${pageContext.request.contextPath}/estudantes">Cadastre um estudante</a>.
+            </div>
+        </c:when>
+        <c:otherwise>
+            <form action="${pageContext.request.contextPath}/matriculas" method="post" class="mb-5">
+                <input type="hidden" name="turma" value="${turma.id}"/>
+                <input type="hidden" name="acao" value="matricular"/>
+                <label for="estudante" class="form-label">Estudante:</label>
+                <div class="input-group">
+                    <select class="form-select" id="estudante" name="estudante" required="required">
+                        <c:forEach var="estudante" items="${disponiveis}">
+                            <t:opcao valor="${estudante.id}" rotulo="${estudante.matricula} - ${estudante.nome}"/>
+                        </c:forEach>
+                    </select>
+                    <button type="submit" class="btn btn-primary px-4">Matricular</button>
+                </div>
+            </form>
+        </c:otherwise>
+    </c:choose>
+
+    <!-- Tabela de Estudantes Matriculados -->
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+            <tr class="text-uppercase" style="font-size: 0.9rem; font-weight: bold;">
+                <th scope="col">Matrícula</th>
+                <th scope="col">Nome</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Matriculado em</th>
+                <th scope="col">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="matricula" items="${matriculas}">
+                <tr>
+                    <td><c:out value="${matricula.estudante.matricula}"/></td>
+                    <td><c:out value="${matricula.estudante.nome}"/></td>
+                    <td><c:out value="${matricula.estudante.email}"/></td>
+                    <td>${matricula.dataMatriculaFormatada}</td>
+                    <td>
+                        <form action="${pageContext.request.contextPath}/matriculas" method="post" class="d-inline"
+                              onsubmit="return confirm('Deseja cancelar esta matrícula?');">
+                            <input type="hidden" name="turma" value="${turma.id}"/>
+                            <input type="hidden" name="acao" value="cancelar"/>
+                            <input type="hidden" name="id" value="${matricula.id}"/>
+                            <button type="submit" class="btn btn-danger btn-sm">Cancelar</button>
+                        </form>
+                    </td>
+                </tr>
+            </c:forEach>
+            <c:if test="${empty matriculas}">
+                <tr>
+                    <td colspan="5" class="text-center text-body-secondary">Nenhum estudante matriculado.</td>
+                </tr>
+            </c:if>
+            </tbody>
+        </table>
+    </div>
+
+    <a href="${pageContext.request.contextPath}/turmas" class="btn btn-secondary mb-5">Voltar para turmas</a>
+</main>
+
+</t:layout>
+</jsp:root>
